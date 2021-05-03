@@ -1,0 +1,91 @@
+---
+title: "ASSIGNMENT 4"
+author: "Manish Shekhar"
+date: '2020-04-20'
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+bibliography: ./bibliography.bib
+---
+
+# Markdown Basics
+
+## Favorite Foods
+1. Biryani
+2. Gulab Jamun
+3. Pizza
+
+## Images
+![All Cases (Log Plot)](./10-all-cases-log.png)
+
+## Add a Quote
+From Spiderman movie:
+
+> With great power comes great reponsiblity
+
+## Add an Equation
+Standard deviation equation is:
+$\sigma = \sqrt(\sum(x_i - \mu)^2/N)$
+
+## Add a Footnote
+A footnote [^1]
+
+[^1]: R Markdown quick refresher.
+
+## Add Citations
+* R for Everyone [@lander2014r]
+* Discovering Statistics Using R [@field2012discovering]
+
+# Inline Code
+
+## NY Times COVID-19 Data
+`r library(ggplot2)` 
+```{r include = FALSE} 
+heights_df <- read.csv("./heights.csv")
+covid_df <- read.csv("./us-states.csv")
+california_df <- covid_df[ which(covid_df$state == "California"), ]
+ny_df <- covid_df[ which(covid_df$state == "New York"), ]
+florida_df <- covid_df[ which(covid_df$state == "Florida"), ]
+```
+
+```{r echo = FALSE} 
+ggplot(data=florida_df, aes(x=as.Date(date), group=1)) + 
+    geom_line(aes(y = cases, colour = "Florida")) + 
+    geom_line(data=ny_df, aes(y = cases,colour="New York")) + 
+    geom_line(data=california_df, aes(y = cases, colour="California")) + 
+    scale_colour_manual("",
+                        breaks = c("Florida", "New York", "California"),
+                        values = c("darkred", "darkgreen", "steelblue")) + 
+    xlab(" ") + 
+    ylab("Cases") + 
+    scale_y_log10()
+```
+
+## R4DS Height vs Earnings
+```{r echo = FALSE}
+ggplot(data = heights_df, aes(x=height, y=earn, col=sex)) + 
+  geom_point() + 
+  ggtitle(label = "Height vs. Earnings") +
+  xlab(label = "Height (Inches)") +
+  ylab(label = "Earnings (Dollars)")
+```
+# Tables
+
+## Knitr Table with Kable
+```{r}
+characters_df <- read.csv(file = "./lotr_characters.csv")
+knitr :: kable(head(characters_df), caption ='One Ring to Rule Them All')
+```
+
+## Pandoc Table
+```{r}
+# I was not able to find exact character.df, lord of the rings file that assignment 
+# has mentioned, thus to show the functionality I used mtcars dataset
+library(pander)
+pandoc.table(mtcars, style = 'rmarkdown')
+```
+
+# References
+1. https://rmarkdown.rstudio.com/authoring_bibliographies_and_citations.html
+2. https://www.rstudio.com/wp-content/uploads/2016/03/rmarkdown-cheatsheet-2.0.pdf
